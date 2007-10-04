@@ -1,0 +1,7 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/POE-Component-Log4perl.t
+lib/POE/Component/Log4perl.pm
+META.yml                                 Module meta-data (added by MakeMaker)

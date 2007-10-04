@@ -1,0 +1,6 @@
+Revision history for Perl extension POE::Component::Log4perl.
+
+0.01  Mon Sep 24 14:01:29 2007
+	- original version; created by h2xs 1.23 with options
+		-AXc -n POE::Component::Log4perl
+
