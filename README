@@ -1,4 +1,4 @@
-POE-Component-Log4perl version 0.01
+POE-Component-Log4perl version 0.02
 ===================================
 
 This module provides a simplified interface to the Log::Log4perl logging
@@ -17,6 +17,7 @@ DEPENDENCIES
 
 This module requires these other modules and libraries:
 
+  POE
   Log::Log4perl
 
 COPYRIGHT AND LICENCE

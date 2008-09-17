@@ -2,6 +2,8 @@ Changes
 Makefile.PL
 MANIFEST
 README
-t/POE-Component-Log4perl.t
+t/01_load.t
+t/02_basic.t
+t/99_pod.t
 lib/POE/Component/Log4perl.pm
 META.yml                                 Module meta-data (added by MakeMaker)
