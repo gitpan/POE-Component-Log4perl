@@ -10,3 +10,7 @@ Revision history for Perl extension POE::Component::Log4perl.
       Bumped the version number.
       Added some further tests to make sure the basic are working OK.
 
+0.03  03-Oct-2009 K.Esteb
+      Added a patch from Adam Flott to add a "trace" level that is now
+      supported by Log4perl.
+

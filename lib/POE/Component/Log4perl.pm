@@ -10,71 +10,72 @@ use Log::Log4perl::Level;
 
 # ------------------------------------------------------------------------
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 our $level = $INFO;
 
 # ------------------------------------------------------------------------
 
 sub spawn {
-	my $class = shift;
+    my $class = shift;
 
-	POE::Session->create(
-		inline_states => {
-			_start => \&start_logger,
-			_stop  => \&stop_logger,
-			info   => sub { local $level = $INFO;  poe_logger(@_) },
-			debug  => sub { local $level = $DEBUG; poe_logger(@_) },
-			warn   => sub { local $level = $WARN;  poe_logger(@_) },
-			error  => sub { local $level = $ERROR; poe_logger(@_) },
-			fatal  => sub { local $level = $FATAL; poe_logger(@_) },
-			category => sub { 
-				my ($heap, $arg0) = @_[HEAP,ARG0];
-				$heap->{_category} = $arg0;
-			},
-		},
-		args => [@_ ],
-	);
+    POE::Session->create(
+        inline_states => {
+            _start => \&start_logger,
+            _stop  => \&stop_logger,
+            info   => sub { local $level = $INFO;  poe_logger(@_) },
+            debug  => sub { local $level = $DEBUG; poe_logger(@_) },
+            warn   => sub { local $level = $WARN;  poe_logger(@_) },
+            error  => sub { local $level = $ERROR; poe_logger(@_) },
+            fatal  => sub { local $level = $FATAL; poe_logger(@_) },
+            trace  => sub { local $level = $TRACE; poe_logger(@_) },
+            category => sub { 
+                my ($heap, $arg0) = @_[HEAP,ARG0];
+                $heap->{_category} = $arg0;
+            },
+        },
+        args => [@_ ],
+    );
 
 }
 
 sub start_logger {
-	my ($kernel, $heap, %args) = @_[KERNEL, HEAP, ARG0 .. $#_];
+    my ($kernel, $heap, %args) = @_[KERNEL, HEAP, ARG0 .. $#_];
 
-	Log::Log4perl::init_once($args{ConfigFile});
+    Log::Log4perl::init_once($args{ConfigFile});
     $Log::Log4perl::caller_depth = 1;
-	*{main::get_logfile} = $args{GetLogfile} if (defined($args{GetLogfile}));
+    *{main::get_logfile} = $args{GetLogfile} if (defined($args{GetLogfile}));
 
-	$heap->{_alias} = $args{Alias} || 'logger';
-	$heap->{_category} = $args{Category};
+    $heap->{_alias} = $args{Alias} || 'logger';
+    $heap->{_category} = $args{Category};
 
-	$kernel->alias_set($args{Alias});
-	  
+    $kernel->alias_set($args{Alias});
+      
 }
 
 sub stop_logger {
-	my ($kernel, $heap) = @_[KERNEL, HEAP];
+    my ($kernel, $heap) = @_[KERNEL, HEAP];
 
-	$kernel->alias_remove($heap->{_alias});
-	delete $heap->{_alias};
+    $kernel->alias_remove($heap->{_alias});
+    delete $heap->{_alias};
 
 }
 
 sub poe_logger {
-	my ($heap, $arg0, @args) = @_[HEAP, ARG0, ARG1 .. $#_];
+    my ($heap, $arg0, @args) = @_[HEAP, ARG0, ARG1 .. $#_];
 
-	my $message;
-	my $log = Log::Log4perl->get_logger($heap->{_category});
+    my $message;
+    my $log = Log::Log4perl->get_logger($heap->{_category});
 
-	if (ref($arg0)) {
+    if (ref($arg0)) {
 
-		$log->log(%$arg0);
+        $log->log(%$arg0);
 
-	} else {
+    } else {
 
-		$message = join("", $arg0, @args);
-		$log->log($level, $message);
+        $message = join("", $arg0, @args);
+        $log->log($level, $message);
 
-	}
+    }
 
 }
 
